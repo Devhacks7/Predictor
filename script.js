@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultDiv = document.getElementById('result');
         const categoryDiv = document.getElementById('category');
 
-        if (numberInput < 0 || numberInput > 9 || isNaN(numberInput)) {
-            resultDiv.innerHTML = "<b>Please enter a valid number between 0 and 9.</b>";
+        if (numberInput < 1 || numberInput > 9 || isNaN(numberInput)) {
+            resultDiv.innerHTML = "<b>Please enter a valid number between 1 and 9.</b>";
             return;
         }
 
         const userId = 'user'; // Simulate a unique user ID
         if (!userStates[userId]) {
-            userStates[userId] = { manualSwitch: false, category: null };
+            userStates[userId] = { showHigher: false }; // Default mode is to show lower
         }
 
         try {
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            generatePrediction(apiData, parseInt(numberInput), resultDiv, categoryDiv, userId);
+            generatePrediction(apiData, resultDiv, categoryDiv, userId);
         } catch (error) {
             console.error('Error:', error);
             resultDiv.innerHTML = "<b>Failed to fetch predictions. Please try again later.</b>";
@@ -53,15 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.json();
     }
 
-    function generatePrediction(data, lastDrawnNumber, resultDiv, categoryDiv, userId) {
+    function generatePrediction(data, resultDiv, categoryDiv, userId) {
         const numberScores = Array(10).fill(0);
         const drawnHistory = [5, 8, 8, 9, 3]; // Example history
 
         drawnHistory.forEach((number, index) => {
             numberScores[number] += index < drawnHistory.length - 3 ? 1 : -1;
         });
-
-        numberScores[lastDrawnNumber] += 5;
 
         const frequencyData = data.data.find(item => item.typeName === "Frequency") || {};
         const missingData = data.data.find(item => item.typeName === "Missing") || {};
@@ -80,9 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const smallCount = rankedPredictions.filter(pred => pred.number <= 4).length;
         const bigCount = rankedPredictions.filter(pred => pred.number >= 5).length;
 
-        if (!userStates[userId].category) {
-            userStates[userId].category = bigCount > smallCount ? 'BIG' : 'SMALL';
-        }
+        // Determine the result based on the current mode
+        const currentMode = userStates[userId].showHigher ? 'HIGHER' : 'LOWER';
+        const initialResult = currentMode === 'HIGHER' 
+            ? (bigCount >= smallCount ? 'BIG' : 'SMALL') 
+            : (smallCount <= bigCount ? 'SMALL' : 'BIG');
 
         const now = new Date();
         const totalMinutes = now.getHours() * 60 + now.getMinutes() + 1 - 330;
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentDate = now.toISOString().slice(0, 10).replace(/-/g, '');
         const autoPeriod = `${currentDate}01${formattedMinutes}`;
 
-        let output = `<b>🎯 Prediction Based on Last No ${lastDrawnNumber}:</b><br><b>Top Predicted Numbers:</b><br>`;
+        let output = `<b>🎯 Prediction:</b><br><b>Top Predicted Numbers:</b><br>`;
         rankedPredictions.forEach((pred, index) => {
             const sizeLabel = pred.number >= 5 ? 'Big' : 'Small';
             output += `${index + 1}. ${pred.number} (${sizeLabel})<br>`;
@@ -98,19 +98,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         output += `<br><b>📊 G Tʏᴘᴇ ➢ Wɪɴɢᴏ 1 Mɪɴ</b>`;
         output += `<br><b>💠 Pᴇʀɪᴏᴅ ➢</b> ${autoPeriod}`;
-        output += `<br><b>📈 Rᴇsᴜʟᴛ ➢</b> ${userStates[userId].category}`;
-
+        output += `<br><b>📈 Rᴇsᴜʟᴛ ➢</b> ${initialResult}`;
 
         categoryDiv.innerHTML = `
             <button id="category" class="betButton">Change Pre ⚙️</button>
         `;
 
+        // Event listener for changing prediction
         document.getElementById('category').addEventListener('click', () => {
-            userStates[userId].manualSwitch = !userStates[userId].manualSwitch;
-            userStates[userId].category = userStates[userId].category === 'Default' ? 'New' : 'Default';
-            resultDiv.innerHTML += `<br><b>Prediction switched to ${userStates[userId].category}!</b>`;
+            userStates[userId].showHigher = !userStates[userId].showHigher;
+
+            // Show the modal with the message
+            const modeMessage = userStates[userId].showHigher ? '🔄' : '🔄';
+            showModal(`Your prediction system has been changed! ${modeMessage} System.`);
         });
 
         resultDiv.innerHTML = output;
+    }
+
+    // Function to show the modal
+    function showModal(message) {
+        const modal = document.getElementById('modal');
+        const modalMessage = document.getElementById('modalMessage');
+        modalMessage.innerText = message;
+        modal.style.display = "block";
+    }
+
+    // Close the modal when the user clicks on <span> (x)
+    document.querySelector('.close').addEventListener('click', () => {
+        document.getElementById('modal').style.display = "none";
+    });
+
+    // Close the modal when clicking outside of the modal
+    window.onclick = function(event) {
+        const modal = document.getElementById('modal');
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
     }
 });
