@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultDiv = document.getElementById('result');
         const categoryDiv = document.getElementById('category');
 
-        if (numberInput < 1 || numberInput > 9 || isNaN(numberInput)) {
-            resultDiv.innerHTML = "<b>Please enter a valid number between 1 and 9.</b>";
+        if (numberInput < 0 || numberInput > 9 || isNaN(numberInput)) {
+            resultDiv.innerHTML = "<b>Please enter a valid number between 0 and 9.</b>";
             return;
         }
 
