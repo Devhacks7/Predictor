@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Page</title>
+    <link rel="stylesheet" href="styles.css"> <style>
+      .container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: rgba(30, 30, 30, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column; /* Aligns items in a column */
+    align-items: center; /* Centers items horizontally */
+}
+
+form {
+    display: flex;
+    flex-direction: column; /* Column layout for form elements */
+    align-items: center; /* Center form elements horizontally */
+}
+
+input[type="text"],
+button {
+    width: 100%; /* Adjust to full width */
+    max-width: 400px; /* Limit max width */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Access H4CK</h1>
+        <h3>🎉 Welcome to Dev Predictor 🎉</h3>
+        <form id="accessForm">
+            <label for="userId">Enter ID:</label>
+            <input type="text" id="userId" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const validIds = ['', '', '789']; // Predefined IDs
+        const form = document.getElementById('accessForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const userId = document.getElementById('userId').value;
+            if (validIds.includes(userId)) {
+                resultDiv.innerHTML = `<div class="success">Access Granted! Redirecting...</div>`;
+                setTimeout(() => {
+                    window.location.href = 'main.html'; // Redirect to main.html
+                }, 2000); // 2-second delay before redirecting
+            } else {
+                resultDiv.innerHTML = `<div class="error">Access Denied!</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
