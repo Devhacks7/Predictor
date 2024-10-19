@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .map((score, i) => ({ number: i, score }))
             .filter(prediction => prediction.score > 0)
             .sort((a, b) => b.score - a.score)
-            .slice(0, 7);
+            .slice(0, 5);
 
         const smallCount = rankedPredictions.filter(pred => pred.number <= 4).length;
         const bigCount = rankedPredictions.filter(pred => pred.number >= 5).length;
