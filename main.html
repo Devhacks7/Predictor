@@ -31,7 +31,6 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             padding: 40px;
             text-align: center;
-            border: linear-gradient(45deg, #00c6ff, #0072ff);
             border: solid 4px #00c6ff;
         }
 
@@ -98,8 +97,8 @@
             max-width: 500px; 
             border-radius: 10px;
             max-height: 80%;
-            overflow-y: auto; /* Enables scrolling */
-            color: white; /* Set text color to black */
+            overflow-y: auto;
+            color: white; 
         }
 
         .close {
@@ -136,11 +135,10 @@
 <body>
     <div class="container">
         <h2>Welcome To Dev Hack</h2>
-        <H3>🤖Select Hacks!🤖</H3>
+        <h3>🤖Select Hacks!🤖</h3>
         <div class="button-container">
             <button onclick="window.location.href='page1.html'">🎮Old Hack</button>
             <button onclick="window.location.href='page2.html'">🎮New Hack</button>
-            <br>
         </div>
     </div>
 
@@ -155,9 +153,8 @@
                 <p>2. Play at your own risk, we are not responsible...</p>
                 <p>3. Play according to the good time and trend ...</p>
                 <p>4. Do not use hacks when there are back to back losses ...</p>
-                <p>5. play according to the level and don't play the whole day you will win 100% ok 👍...</p>
+                <p>5. Play according to the level and don't play the whole day you will win 100% ok 👍...</p>
                 <p>6. You are playing it at your own risk ...</p>
-                <!-- Add more text as needed -->
             </div>
             <div class="checkbox-container">
                 <input type="checkbox" id="acceptTerms">
@@ -169,7 +166,14 @@
 
     <script>
         window.onload = function() {
-            document.getElementById('myModal').style.display = 'flex';
+            const lastAccepted = localStorage.getItem('termsAccepted');
+            const currentTime = new Date().getTime();
+            const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+            // Show the modal if not accepted or if more than 5 minutes have passed
+            if (!lastAccepted || (currentTime - lastAccepted) > fiveMinutes) {
+                document.getElementById('myModal').style.display = 'flex';
+            }
         }
 
         function closeModal() {
@@ -178,6 +182,7 @@
 
         function acceptTerms() {
             if (document.getElementById('acceptTerms').checked) {
+                localStorage.setItem('termsAccepted', new Date().getTime()); // Store the current time
                 closeModal();
             } else {
                 alert("Please accept the terms and conditions to proceed.");
@@ -185,4 +190,4 @@
         }
     </script>
 </body>
-  </html>
+</html>
