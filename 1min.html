@@ -12,19 +12,25 @@
             margin: 0;
             padding: 0;
             color: #fff;
+            overflow-y: scroll; /* Enable vertical scrolling */
         }
         h1, h2 {
             color: #007bff;
             text-align: center;
             margin-top: 20px;
         }
+        .wrapper {
+            position: relative;
+            z-index: 1; /* Ensure the content is above the canvas */
+            padding-bottom: 20px; /* To make room for scrolling */
+        }
         .card {
             max-width: 90%;
             margin: 20px auto;
             padding: 20px;
             border-radius: 8px;
-            background-color: #444;
-            box-shadow: 3 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(34, 34, 34, 0.4);
+            box-shadow: 3 4px 8px rgba(34, 34, 34, 0.1);
         }
         #dataTable, #predictionHistoryTable {
             width: 100%;
@@ -101,6 +107,69 @@
             justify-content: center;
             margin: 20px 0;
         }
+        .button-group a {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline */
+            color: white; /* Text color */
+            display: inline-block; /* Make anchor behave like a button */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        canvas {
+            position: fixed; /* Use fixed position to keep it in the background */
+            top: 0;
+            left: 0;
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            z-index: -1; /* Send it to the background */
+            opacity: 0.3; /* Increased opacity for better visibility */
+            pointer-events: none; /* Disable interaction with canvas */
+        }
+
+        #registerButton {
+            background-color: #007bff; /* Blue for Register */
+        }
+        #telegramButton {
+            background-color: #dc3545; /* Red for Telegram */
+        }
+        .button-group a:hover {
+            transform: scale(1.05);
+        }
+        @media (max-width: 768px) {
+            .card {
+                padding: 15px;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+            #timeRemaining {
+                font-size: 20px;
+            }
+            #predictedNumber, #predictedPremium {
+                font-size: 16px;
+            }
+            #predictionChart {
+                height: 200px; /* Adjusted height for mobile */
+            }
+        }
+        @media (max-width: 480px) {
+            th, td {
+                font-size: 12px;
+            }
+            #timeRemaining {
+                font-size: 18px;
+            }
+            #predictedNumber, #predictedPremium {
+                font-size: 14px;
+            }
+            #predictionChart {
+                height: 180px; /* Further adjustment for very small screens */
+            }
+        }
         
         button {
     padding: 15px;
@@ -147,41 +216,10 @@ button:active {
         .button-group a:hover {
             transform: scale(1.05);
         }
-        @media (max-width: 768px) {
-            .card {
-                padding: 15px;
-            }
-            th, td {
-                padding: 8px;
-                font-size: 14px;
-            }
-            #timeRemaining {
-                font-size: 20px;
-            }
-            #predictedNumber, #predictedPremium {
-                font-size: 16px;
-            }
-            #predictionChart {
-                height: 200px; /* Adjusted height for mobile */
-            }
-        }
-        @media (max-width: 480px) {
-            th, td {
-                font-size: 12px;
-            }
-            #timeRemaining {
-                font-size: 18px;
-            }
-            #predictedNumber, #predictedPremium {
-                font-size: 14px;
-            }
-            #predictionChart {
-                height: 180px; /* Further adjustment for very small screens */
-            }
-        }
     </style>
 </head>
 <body>
+    <canvas id="particleCanvas"></canvas>
     <h1>1Min Wingo</h1>
     <div class="card">
         <h2>Live Prediction</h2>
@@ -239,6 +277,7 @@ button:active {
         <div class="button-group">
         <a href="https://t.me/DK_Devlop_7" id="registerButton" target="_blank">Telegram Join Now!!</a>
     </div>
+     <script src="nn.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const tableBody = document.querySelector('#dataTable tbody');
@@ -437,4 +476,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-  </html>
+    </html>
+    
