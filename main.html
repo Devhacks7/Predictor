@@ -5,101 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Dev Hacks</title>
     <style>
+        /* General Reset */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Arial', sans-serif;
             background: radial-gradient(circle at top right, #1c1c1c, #0e0e0e);
             color: #e0e0e0;
-            line-height: 1.6;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            position: relative;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(30, 30, 30, 0.8);
+            max-width: 400px;
+            width: 100%;
+            background: rgba(20, 20, 20, 0.9);
             border-radius: 15px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
-            border: solid 4px #00c6ff;
+            padding: 30px;
+            border: 2px solid #00c6ff;
         }
 
-        h2, h1 {
+        h2 {
+            font-size: 2.2rem;
             color: #4a90e2;
+            text-shadow: 0 0 10px rgba(74, 144, 226, 0.8);
             margin-bottom: 20px;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(74, 144, 226, 0.8);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: #d9e8ff;
         }
 
         .button-container {
             display: flex;
-            justify-content: center;
-            margin: 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
 
         button {
+            width: 100%;
+            max-width: 350px;
             padding: 15px;
+            font-size: 1.2rem;
+            color: #fff;
             background: linear-gradient(45deg, #00c6ff, #0072ff);
-            color: white;
             border: none;
             border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             cursor: pointer;
-            width: 48%;
-            margin: 0 1%;
-            font-size: 1.1em;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            transition: transform 0.1s, background 0.3s, box-shadow 0.3s;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
         }
 
         button:hover {
             background: linear-gradient(45deg, #0072ff, #00c6ff);
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 198, 255, 0.7);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 198, 255, 0.7);
         }
 
         button:active {
             transform: translateY(0);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
         }
 
         /* Modal Styles */
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1; 
+            display: none;
+            position: fixed;
+            z-index: 10;
             left: 0;
             top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(34, 34, 34, 0.7);
-            backdrop-filter: blur(3px);
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             justify-content: center;
             align-items: center;
         }
 
         .modal-content {
-            background-color: rgba(34, 34, 34, 0.8);
-            margin: auto; 
+            background: rgba(34, 34, 34, 0.95);
+            margin: auto;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%; 
-            max-width: 500px; 
-            border-radius: 10px;
-            max-height: 80%;
-            overflow-y: auto;
-            color: white; 
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            text-align: left;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content h2 {
+            text-align: center;
+            color: #4a90e2;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .checkbox-container {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container input {
+            margin-right: 10px;
         }
 
         .close {
@@ -107,65 +133,55 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
             cursor: pointer;
         }
 
-        .terms {
+        .close:hover {
+            color: #fff;
+        }
+
+        #acceptButton {
             margin-top: 20px;
-            text-align: left;
+            width: 100%;
         }
 
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .modal-content {
+                width: 90%;
+            }
 
-        input[type="checkbox"] {
-            margin-right: 10px;
-            padding: 10px;
+            button {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Welcome To Dev Hack</h2>
-        <h3>🤖Select Hacks!🤖</h3>
+        <h2>Welcome to Dev Hacks</h2>
+        <h3>🤖 Select Your Hacks! 🤖</h3>
         <div class="button-container">
-            <!--button onclick="window.location.href='page1.html'">Hack 1</button-->
             <button onclick="window.location.href='page2.html'">Hack 2</button>
-        </div>
-        <div class="button-container">
             <button onclick="window.location.href='bot.html'">BOT 🤖</button>
             <button onclick="window.location.href='30sec.html'">30Sec Hack</button>
-            </div>
-            <br>
-            <button onclick="window.location.href='GFG.html'">NEW Hack💀</button>
-            <br>
-            <br>
+            <button onclick="window.location.href='GFG.html'">NEW Hack 💀</button>
             <button onclick="window.location.href='1min.html'">1MIN CHART HACK 📈</button>
+        </div>
+        <!--button onclick="showModal()">Terms & Conditions 📜</button-->
     </div>
 
-    <!-- Modal -->
+    <!-- Terms & Conditions Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Terms and Conditions</h2>
-            <div class="terms">
-                <p>Please read the following terms and conditions carefully...</p>
-                <p>1. Play With Levels 🎚️...</p>
-                <p>2. Play at your own risk, we are not responsible...</p>
-                <p>3. Play according to the good time and trend ...</p>
-                <p>4. Do not use hacks when there are back to back losses ...</p>
-                <p>5. Play according to the level and don't play the whole day you will win 100% ok 👍...</p>
-                <p>6. You are playing it at your own risk ...</p>
-            </div>
+            <p>1. Play With Levels 🎚️...</p>
+            <p>2. Play at your own risk; we are not responsible...</p>
+            <p>3. Play according to the good time and trend...</p>
+            <p>4. Avoid playing after back-to-back losses...</p>
+            <p>5. Follow the levels, and don’t play the entire day...</p>
+            <p>6. You play entirely at your own risk...</p>
             <div class="checkbox-container">
                 <input type="checkbox" id="acceptTerms">
                 <label for="acceptTerms">I accept the terms and conditions</label>
@@ -173,6 +189,26 @@
             <button id="acceptButton" onclick="acceptTerms()">Accept</button>
         </div>
     </div>
+
+    <script>
+        function showModal() {
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function acceptTerms() {
+            const checkbox = document.getElementById('acceptTerms');
+            if (checkbox.checked) {
+                alert('You have accepted the terms and conditions.');
+                closeModal();
+            } else {
+                alert('Please accept the terms and conditions to proceed.');
+            }
+        }
+    </script>
 
     <script>
         window.onload = function() {
@@ -200,4 +236,5 @@
         }
     </script>
 </body>
-</html>
+                </html>
+                
